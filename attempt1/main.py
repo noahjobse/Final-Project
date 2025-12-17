@@ -32,3 +32,11 @@ def main():
 if __name__ == "__main__":
     main()
     
+
+#idea for deducting inventory
+def deduct_inventory(self, item_name, count):
+    with self.lock:
+        current = self.inventory.get(item_name, 0)
+        if current < count:
+            raise OutOfStockError("Not enough inventory")
+        self.inventory[item_name] -= count

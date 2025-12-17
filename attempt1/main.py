@@ -54,8 +54,7 @@ def main():
             given_warehouse = warehouse.warehouse_id
         else:
             valid_status = "Failed"
-            given = "None"
-        
+            given_warehouse = None
         print(f"{order.order_id:<15} {valid_status:<10} {given_warehouse}")
 
     #Fulfill valid orders sequentially
@@ -65,11 +64,6 @@ def main():
     
     #assuming the engine.fulfill_orders method handles the loop and printing
     engine.fulfill_orders(warehouses, validation_results)
-
-    # Convert Warehouse objects back to dicts for JSON serialization and inventory as dict
-    with open('database/warehouses.json', 'w') as f:
-        warehouses_data = [{"warehouse_id": w.warehouse_id, "inventory": {p.product_id: p.quantity for p in w.inventory}} for w in warehouses]
-        json.dump(warehouses_data, f, indent=4)
     
 if __name__ == "__main__":
     main()

@@ -71,6 +71,6 @@ class FulfillmentEngine:
                             print(f"Order {order.order_id} Fulfilled Successfully.")
 
                         except OutofStockError as e:
-                            print(f"Error during fulfillment: {e}")
+                            print(f"there was an error fullfilling your order: {e}")
                     else:
                         print(f"\nSkipping Order {order.order_id}: Inventory changed, no longer valid.")

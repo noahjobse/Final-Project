@@ -1,4 +1,0 @@
-id,inventory_json
-W1_Main,"{""Laptop"": 5, ""Mouse"": 100}"
-W2_Overflow,"{""Laptop"": 2, ""Keyboard"": 50, ""Monitor"": 10}"
-W3_Accessories,"{""Mouse"": 500, ""Headset"": 100}"

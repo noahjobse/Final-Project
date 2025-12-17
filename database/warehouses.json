@@ -1,0 +1,24 @@
+[
+  {
+    "id": "W1_Main",
+    "inventory": {
+      "Laptop": 5,
+      "Mouse": 100
+    }
+  },
+  {
+    "id": "W2_Overflow",
+    "inventory": {
+      "Laptop": 2,
+      "Keyboard": 50,
+      "Monitor": 10
+    }
+  },
+  {
+    "id": "W3_Accessories",
+    "inventory": {
+      "Mouse": 500,
+      "Headset": 100
+    }
+  }
+]

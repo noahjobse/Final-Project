@@ -1,7 +1,8 @@
 import json
 from engine import FulfillmentEngine
-from models import Product, Order, Warehouse
+from models import Order, Warehouse
 
+# Load sample data
 with open('attempt1/sample_data.json', 'r') as file:
     data = json.load(file)
     # print(data)
@@ -11,14 +12,11 @@ with open('attempt1/sample_data.json', 'r') as file:
 
 
 def main():
-    # for warehouse in warehouses:
-    #     print(f"Warehouse ID: {warehouse.warehouse_id}")
-    #     for product in warehouse.inventory:
-    #         print(f"  Product ID: {product.product_id}, Name: {product.name}, Quantity: {product.quantity}")
-
+    # Validate orders in parallel
     engine = FulfillmentEngine()
     validation_results = engine.is_valid(orders, warehouses)
     
+    # Print validation results
     print("\nParallel Validation Results:")
     for order, is_valid, warehouse in validation_results:
         if is_valid:

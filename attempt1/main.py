@@ -54,7 +54,7 @@ def main():
             given_warehouse = warehouse.warehouse_id
         else:
             valid_status = "Failed"
-            given_warehouse = "None"
+            given = "None"
         
         print(f"{order.order_id:<15} {valid_status:<10} {given_warehouse}")
 

@@ -25,7 +25,7 @@ class FulfillmentEngine:
             all_items_available = True
 
             for product in order.items:
-                #check specific quantity here manually
+                #check specific quantity here
                 #find the product object in the warehouse list
                 product_in_stock = None
                 for wp in warehouse.inventory:
@@ -55,7 +55,7 @@ class FulfillmentEngine:
             if is_valid:
                 with self.lock:
                     #We validate ONCE per order, not per item
-                    # Because stock might have changed since the parallel check
+                    #Because stock might have changed since the parallel check
                     recheck_order, recheck_valid, recheck_warehouse = self.validate_order(order, warehouses)
                     
                     if recheck_valid and recheck_warehouse.warehouse_id == warehouse.warehouse_id:
@@ -63,7 +63,7 @@ class FulfillmentEngine:
                         print("-" * 55)
                         
                         try:
-                            # Deduct stock for all items
+                            #Deduct stock for all items
                             for order_product in order.items:
                                 warehouse.remove_from_inventory(order_product.product_id, order_product.quantity)
                                 print(f"Product: {order_product.product_id}\tRemoved Quantity: {order_product.quantity}")

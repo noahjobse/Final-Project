@@ -28,10 +28,20 @@ class Warehouse:
         else:
             self.inventory = inventory
 
-    def in_inventory(self, product_id):
-        for product in self.inventory:
-            if product.product_id == product_id:
-                return product.quantity > 0
+    def in_inventory(self, order_product):
+        # for product in self.inventory:
+        #     if product.product_id == product_id:
+        #         return product.quantity > 0  
+        #check specific quantity here
+        #find the product object in the warehouse list
+        product_in_stock = None
+        for wp in self.inventory:
+            if wp.product_id == order_product.product_id:
+                product_in_stock = wp
+                break
+        # Check if it exists and has enough
+        if not product_in_stock or product_in_stock.quantity < order_product.quantity:
+            return True
         return False
     
     def remove_from_inventory(self, order_product_id, order_quantity):

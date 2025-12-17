@@ -1,0 +1,7 @@
+{
+"orders": [
+ {"order_id": "O1001", "items": {"Laptop": 1, "Mouse": 2}},
+ {"order_id": "O1002", "items": {"Keyboard": 1}},
+ {"order _id": "O1003", "items": {"Laptop": 3, "Keyboard": 2, "Mouse": 5}}
+ ]
+}

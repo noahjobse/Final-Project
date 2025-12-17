@@ -2,6 +2,7 @@ from concurrent.futures import ThreadPoolExecutor
 from threading import Lock
 from models import Product, Order, Warehouse
 
+# FulfillmentEngine class to manage order fulfillment process
 class FulfillmentEngine:
     def __init__(self):
         self.state = "initialized"

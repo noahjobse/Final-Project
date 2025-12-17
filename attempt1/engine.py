@@ -1,12 +1,10 @@
 from concurrent.futures import ThreadPoolExecutor
 from threading import Lock
 from models1 import Product, Order, Warehouse
-
-# FulfillmentEngine class to manage order fulfillment process
+from exceptions import OutofStockError
 class FulfillmentEngine:
     def __init__(self):
         self.state = "initialized"
-        # Thread lock for mutual exclusion during order fulfillment process
         self.lock = Lock()
 
     def start(self):
@@ -20,7 +18,6 @@ class FulfillmentEngine:
     def get_status(self):
         return self.state
 
-    # Check if orders can be fulfilled from available warehouses, and return order, bool, warehouse
     def validate_order(self, order, warehouses):
         valid_warehouse = None
 
@@ -28,7 +25,16 @@ class FulfillmentEngine:
             all_items_available = True
 
             for product in order.items:
-                if not warehouse.in_inventory(product.product_id, product.quantity):
+                #check specific quantity here manually
+                #find the product object in the warehouse list
+                product_in_stock = None
+                for wp in warehouse.inventory:
+                    if wp.product_id == product.product_id:
+                        product_in_stock = wp
+                        break
+                
+                # Check if it exists and has enough
+                if not product_in_stock or product_in_stock.quantity < product.quantity:
                     all_items_available = False
                     break
 
@@ -36,39 +42,35 @@ class FulfillmentEngine:
                 valid_warehouse = warehouse
                 break
 
-        # Tuple (order: Orderis_valid: bool, warehouse: Warehouse or None)
-        # print(order.order_id, (order, valid_warehouse is not None, valid_warehouse))
         return (order, valid_warehouse is not None, valid_warehouse)
 
-
-    # Validate orders in parallel w/ ThreadPoolExecutor, and return list of results
     def is_valid(self, orders, warehouses):
         with ThreadPoolExecutor() as executor:
             futures = [executor.submit(self.validate_order, order, warehouses) for order in orders]
             results = [future.result() for future in futures]
-            # print(results)
-
         return results
 
-
-    # Fulfill valid orders sequentially with thread lock
-    def fulfill_orders(self,warehouses, validation_results):
+    def fulfill_orders(self, warehouses, validation_results):
         for order, is_valid, warehouse in validation_results:
             if is_valid:
                 with self.lock:
-                    print(f"\nFulfilling Order: {order.order_id}) from Warehouse: {warehouse.warehouse_id}...")
-                    print("-" * 55)
+                    #We validate ONCE per order, not per item
+                    # Because stock might have changed since the parallel check
+                    recheck_order, recheck_valid, recheck_warehouse = self.validate_order(order, warehouses)
                     
-                    # Remove items from warehouse inventory after second validation
-                    for order_product in order.items:
-                        second_validation_result = self.validate_order(order, warehouses)
-                        # Check if still valid before fulfilling
-                        is_still_valid = second_validation_result[1]
+                    if recheck_valid and recheck_warehouse.warehouse_id == warehouse.warehouse_id:
+                        print(f"\nFulfilling Order: {order.order_id} from Warehouse: {warehouse.warehouse_id}...")
+                        print("-" * 55)
+                        
+                        try:
+                            # Deduct stock for all items
+                            for order_product in order.items:
+                                warehouse.remove_from_inventory(order_product.product_id, order_product.quantity)
+                                print(f"Product: {order_product.product_id}\tRemoved Quantity: {order_product.quantity}")
+                            
+                            print(f"Order {order.order_id} Fulfilled Successfully.")
 
-                        if is_still_valid:
-                            warehouse.remove_from_inventory(order_product.product_id, order_product.quantity)
-                            print(f"Product:{order_product.product_id}\tRemoved Quantity: {order_product.quantity}")
-
-                        else:
-                            print(f"Product:{order_product.product_id}\tNot enough inventory to fulfill the order.")
-        
+                        except OutofStockError as e:
+                            print(f"Error during fulfillment: {e}")
+                    else:
+                        print(f"\nSkipping Order {order.order_id}: Inventory changed, no longer valid.")

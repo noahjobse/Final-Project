@@ -12,6 +12,6 @@ class OutofStockError(FulfillmentError):
     print("Out of stock error raised")
 
 class InvalidOrderError(FulfillmentError):
-    """This is riased when an order asks for a product that isn't found in the catalog.""
+    """This is raised when an order asks for a product that isn't found in the catalog.""
     """
     pass

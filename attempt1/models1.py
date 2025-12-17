@@ -4,17 +4,15 @@ class Product:
     def __init__(self, product_id, quantity):
         self.product_id = product_id
         self.quantity = quantity
-
-    # def remove_from_inventory(self, product_id, amount):
-    #     if self.product_id == product_id:
-    #         if self.quantity >= amount:
-    #             self.quantity -= amount
-    #             return True
+    
+    #We don't need logic here anymore, the Warehouse handles it.
+    def __repr__(self):
+        return f"{self.product_id}: {self.quantity}"
 
 class Order:
     def __init__(self, order_id, items, warehouse_id=None):
         self.order_id = order_id
-        # Convert items dict to list of Product objects
+        # Handles both dict inputs and list inputs safely
         if isinstance(items, dict):
             self.items = [Product(product_id=pid, quantity=qty) for pid, qty in items.items()]
         else:
@@ -30,29 +28,24 @@ class Warehouse:
         else:
             self.inventory = inventory
 
-    def in_inventory(self, product_id, order_quantity):
-        
+    def in_inventory(self, product_id):
         for product in self.inventory:
-            # print(product.product_id)
             if product.product_id == product_id:
-                if product.quantity > order_quantity:
-                    return True
-        raise OutofStockError(f"Not enough inventory for product {product_id}")        
+                return product.quantity > 0
         return False
     
     def remove_from_inventory(self, order_product_id, order_quantity):
-        # print(self.inventory)
+        #Search for the product in the list
         for product in self.inventory:
             if product.product_id == order_product_id:
+                
+                #Check if we have enough
                 if product.quantity >= order_quantity:
                     product.quantity -= order_quantity
-            return True
-                # return product.remove_from_inventory(product_id, amount)
-        return False
-    
-    # def remove_from_inventory(self, product_id, amount):
-    #     pass
-        # current = self.product_id
-        # if current < amount:
-        #     raise OutOfStockError(f"Not enough inventory")
-        # self.inventory[product_id] = current - amount
+                    return True # Success
+                else:
+                    #Found item, but not enough stock
+                    raise OutofStockError(f"Warehouse {self.warehouse_id}: Not enough {order_product_id} (Requested: {order_quantity}, Have: {product.quantity})")
+        
+        #If loop finishes, we never found the item
+        raise OutofStockError(f"Warehouse {self.warehouse_id}: Product {order_product_id} not found")

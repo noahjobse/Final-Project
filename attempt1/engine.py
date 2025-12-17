@@ -1,5 +1,6 @@
 from concurrent.futures import ThreadPoolExecutor
 from threading import Lock
+from models import Product, Order, Warehouse
 
 class FulfillmentEngine:
     def __init__(self):
@@ -53,7 +54,8 @@ class FulfillmentEngine:
         for order, is_valid, warehouse in validation_results:
             if is_valid:
                 with self.lock:
-                    print(f"\nFulfilling Order {order.order_id} from Warehouse {warehouse.warehouse_id}...\n")
+                    print(f"\nFulfilling Order: {order.order_id}) from Warehouse: {warehouse.warehouse_id}...")
+                    print("-" * 55)
                     
                     # Remove items from warehouse inventory after second validation
                     for order_product in order.items:

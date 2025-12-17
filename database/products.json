@@ -1,22 +1,22 @@
 [
   {
-    "name": "Laptop",
+    "product_id": "Laptop",
     "price": 1000
   },
   {
-    "name": "Mouse",
+    "product_id": "Mouse",
     "price": 20
   },
   {
-    "name": "Keyboard",
+    "naproduct_id": "Keyboard",
     "price": 50
   },
   {
-    "name": "Monitor",
+    "product_id": "Monitor",
     "price": 200
   },
   {
-    "name": "Headset",
+    "product_id": "Headset",
     "price": 80
   }
 ]

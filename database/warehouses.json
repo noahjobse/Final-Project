@@ -1,13 +1,13 @@
 [
   {
-    "id": "W1_Main",
+    "warehouse_id": "W1_Main",
     "inventory": {
       "Laptop": 5,
       "Mouse": 100
     }
   },
   {
-    "id": "W2_Overflow",
+    "warehouse_id": "W2_Overflow",
     "inventory": {
       "Laptop": 2,
       "Keyboard": 50,
@@ -15,7 +15,7 @@
     }
   },
   {
-    "id": "W3_Accessories",
+    "warehouse_id": "W3_Accessories",
     "inventory": {
       "Mouse": 500,
       "Headset": 100

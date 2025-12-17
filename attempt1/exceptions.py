@@ -9,7 +9,7 @@ class OutofStockError(FulfillmentError):
     """raised when a warehouse doesn't have enough stock 
     to fulfill an order.
     """
-    pass
+    print("Out of stock error raised")
 
 class InvalidOrderError(FulfillmentError):
     """This is riased when an order asks for a product that isn't found in the catalog.""

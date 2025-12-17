@@ -1,6 +1,6 @@
 from concurrent.futures import ThreadPoolExecutor
 from threading import Lock
-from models import Product, Order, Warehouse
+from models1 import Product, Order, Warehouse
 
 # FulfillmentEngine class to manage order fulfillment process
 class FulfillmentEngine:
@@ -28,7 +28,7 @@ class FulfillmentEngine:
             all_items_available = True
 
             for product in order.items:
-                if not warehouse.in_inventory(product.product_id):
+                if not warehouse.in_inventory(product.product_id, product.quantity):
                     all_items_available = False
                     break
 
@@ -37,6 +37,7 @@ class FulfillmentEngine:
                 break
 
         # Tuple (order: Orderis_valid: bool, warehouse: Warehouse or None)
+        # print(order.order_id, (order, valid_warehouse is not None, valid_warehouse))
         return (order, valid_warehouse is not None, valid_warehouse)
 
 

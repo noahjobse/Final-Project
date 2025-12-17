@@ -1,3 +1,5 @@
+from exceptions import OutofStockError
+
 class Product:
     def __init__(self, product_id, quantity):
         self.product_id = product_id
@@ -28,20 +30,29 @@ class Warehouse:
         else:
             self.inventory = inventory
 
-    def in_inventory(self, product_id):
+    def in_inventory(self, product_id, order_quantity):
+        
         for product in self.inventory:
+            # print(product.product_id)
             if product.product_id == product_id:
-                if product.quantity > 0:
+                if product.quantity > order_quantity:
                     return True
+        raise OutofStockError(f"Not enough inventory for product {product_id}")        
         return False
     
     def remove_from_inventory(self, order_product_id, order_quantity):
-        print(self.inventory)
+        # print(self.inventory)
         for product in self.inventory:
             if product.product_id == order_product_id:
                 if product.quantity >= order_quantity:
                     product.quantity -= order_quantity
-                    return True
+            return True
                 # return product.remove_from_inventory(product_id, amount)
         return False
     
+    # def remove_from_inventory(self, product_id, amount):
+    #     pass
+        # current = self.product_id
+        # if current < amount:
+        #     raise OutOfStockError(f"Not enough inventory")
+        # self.inventory[product_id] = current - amount
